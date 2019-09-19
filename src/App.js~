@@ -1,0 +1,16 @@
+import React from 'react';
+import WaitingBar from './WaitingBar/WaitingBar';
+import DiaSelector from './DiaSelector/DiaSelector';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <DiaSelector
+      	
+      />
+    </div>
+  );
+}
+
+export default App;
