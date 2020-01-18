@@ -159,7 +159,7 @@ class PathAnimation{
             // lp = pos;
         // });
 
-        for(let i=0; i < 3; ++i){
+        for(let i=0; i < 500; ++i){
             const pt = new PathTravellor({
                 path: points,
                 moveVel: rand(0.1, 0.3), 
