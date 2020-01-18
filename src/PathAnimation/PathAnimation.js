@@ -155,8 +155,8 @@ class PathAnimation{
         const pt = new PathTravellor({
             path: points,
             moveVel: 0.1, 
-            rotVel: 0, 
-            rotOffs: 0
+            rotVel: 0.1, 
+            rotOffs: 0.2
         });
         this.pt = pt;
 
@@ -184,7 +184,7 @@ class PathAnimation{
         this.scene = new THREE.Scene();
     }
     initCamera(){
-        this.cameraOffs = -4;
+        this.cameraOffs = -10;
 
         const [w,h] = this.canvasSize();
 
@@ -290,7 +290,7 @@ class PathAnimation{
 
         let v0 = new THREE.Vector3(1,1,0).normalize();
         let vref = new THREE.Vector3(1,0,0).normalize();
-        let cross = Math3D.evalArbitraryOrthogonal(v0);
+        let cross = Math3D.arbitraryOrthogonal(v0);
 
         this.cp0.position.set(v0.x, v0.y, v0.z);
         this.cpcross.position.set(cross.x, cross.y, cross.z);
@@ -301,8 +301,7 @@ class PathAnimation{
         this.drawLine(cross);
 
         for(let angle=0; angle < Math.PI * 2; angle += 0.01){
-            let quat = Math3D.orthogonalQuaternion(v0.clone(), angle);
-            let mat = Math3D.quaternionToMat(quat);
+            let mat = Math3D.quaternionMatrix(v0.clone(), angle);
             let v1 = cross.clone().applyMatrix4(mat);
 
             this.drawLine(v1);
@@ -329,26 +328,13 @@ class PathAnimation{
 
         return line;
     }
-    rotateCylinder(){
-
-    }
-    evalQuaternion(v0, v1){
-		let vref = new THREE.Vector3(1,0,0);
-		let vtar   = v1.clone().sub(v0.clone()).normalize();
-
-		let cross = vref.clone().cross(vtar).normalize();
-		let angle = vref.clone().angleTo(vtar);
-
-		let quat = new THREE.Quaternion().setFromAxisAngle( cross, angle );
-
-		return quat;
-	}
     animate(){
         this.renderer.render( this.scene, this.camera );
 
         // for(let l of this.lines){
         //     this.scene.remove(l);
-        // }
+        // }            console.log(v1);
+
 
         if(!this.animcntr){
             this.animcntr = 0;
@@ -359,8 +345,7 @@ class PathAnimation{
 
         this.rotateCamera();
 
-        // this.movePt();
-        this.rotateCylinder();
+        this.movePt();
 
         // if(this.animcntr > 100)return;
 

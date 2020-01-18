@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import Math3D from './Math3D';
 
 class PathTravellor{
-    constructor({path, moveVel, rotVel, rotOffs}){
+    constructor({path, moveVel, rotVel=0.01, rotOffs=0.1}){
         this.path = path;
         this.moveVel = moveVel;
         this.rotVel  = rotVel;
@@ -30,10 +30,14 @@ class PathTravellor{
         let posOnPath = p0.add( p1.sub(p0).multiplyScalar( prgrs ) );
 
         let angle = this.curRot;
-        let quat = Math3D.orthogonalQuaternion(dir, angle);
-        let rot = dir.clone().applyQuaternion(quat);
+        let mat = Math3D.quaternionMatrix(dir, angle);
+        let ortho = Math3D.arbitraryOrthogonal(dir);
+        let rotUni = ortho.clone().applyMatrix4(mat);
+        let rot = rotUni.multiplyScalar( this.rotOffs );
 
-        this._pos = posOnPath.clone().add(rot);
+        let posRot = posOnPath.clone().add(rot);
+
+        this._pos = posRot;
 
         return this._pos;
     }
