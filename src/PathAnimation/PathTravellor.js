@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import Math3D from './Math3D';
 
 class PathTravellor{
-    constructor({path, moveVel, rotVel=0.01, rotOffs=0.1}){
+    constructor({path, moveVel, rotVel=0.01, rotOffs=0.1, ranomStartPos=false}){
         this.path = path;
         this.moveVel = moveVel;
         this.rotVel  = rotVel;
@@ -13,6 +13,13 @@ class PathTravellor{
         this.curRot = 0;
 
         this.posAlrCalculated = false;
+
+        if(ranomStartPos){
+            this.setRandomPos();
+        }
+    }
+    setRandomPos(){
+        this.curPathId = Math.floor( Math.random() * this.path.length );
     }
     pos(){
         return this.curPos();
@@ -43,6 +50,10 @@ class PathTravellor{
     }
 
     move(){
+        this._movePos();
+        this._moveRot();
+    }
+    _movePos(){
         this.posAlrCalculated = false;
 
         let moveDt = this.moveVel * this.moveVel;
@@ -80,8 +91,6 @@ class PathTravellor{
         }
 
         this.curPathIdOffsSq = dt;
-
-        this._moveRot();
     }
     _moveRot(){
         this.curRot = (this.curRot + this.rotVel) % (Math.PI * 2);

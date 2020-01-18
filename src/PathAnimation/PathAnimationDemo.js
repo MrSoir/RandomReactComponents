@@ -11,8 +11,15 @@ function PathAnimationDemo({}){
             canvas: canvas.current
         });
 
-
+        window.addEventListener('resize', onCanvasResized);
+        return ()=>{
+            window.removeEventListener('resize', onCanvasResized);
+        }
     }, []);
+
+    function onCanvasResized(){
+        pathAnimation.current.resize();
+    }
 
     return (
         <div className="MainPAD">
