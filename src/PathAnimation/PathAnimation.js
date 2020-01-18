@@ -1,4 +1,8 @@
 import * as THREE from 'three';
+import Stats from 'three/examples/jsm/libs/stats.module.js';
+// import { GUI } from 'three/examples/jsm/libs/dat.gui.module.js';
+
+import InstanceTest from './InstanceTest';
 import Math3D from './Math3D';
 import PathTravellor from './PathTravellor';
 import InstancedSphere from './InstancedSphere';
@@ -77,6 +81,8 @@ class PathAnimation{
         this.animate = this.animate.bind(this);
 
         this.lines = [];
+
+        this.stats = new Stats();
 
         this.initScene();
         this.initCamera();
@@ -172,7 +178,6 @@ class PathAnimation{
                 // ming: 0, maxg: 0,
                 minb: 0, maxb: 0,
             });
-            console.log('color: ', color);
             let ball = this.createBall({
                 color,
                 size: 0.05
@@ -182,9 +187,14 @@ class PathAnimation{
         }
 
         const is = new InstancedSphere();
-        const mesh = is.genCustomShapeMesh();
-
+        const mesh = is.createInstcMeshTest();
+        // const mesh = is.genCustomShapeMesh();
+        // const mesh = is.genInstancedMesh();
         this.scene.add( mesh );
+
+        // const it = new InstanceTest();
+        // const mesh = it.genMesh();
+        // this.scene.add( mesh );
     }
     genRandomColor({
         minb=80, maxb=255,
@@ -220,10 +230,10 @@ class PathAnimation{
         );
         this.camera.position.z = this.cameraZ;
 
-        this.cameraRot = 0;
+        this.cameraRot = Math.PI * 0.5;
     }
     rotateCamera(){
-        this.cameraRot = (this.cameraRot + 0.003) % (Math.PI * 2);
+        this.cameraRot = (this.cameraRot + 0.001) % (Math.PI * 2);
         
         this.camera.position.set(
             Math.cos(this.cameraRot) * this.cameraOffs,
@@ -245,12 +255,22 @@ class PathAnimation{
 	}
     initRenderer(){
         let context = this.canvas.getContext( 'webgl2', { alpha: true, antialias: true } );
-        this.renderer = new THREE.WebGLRenderer({
+        let renderer = new THREE.WebGLRenderer({
             canvas: this.canvas,
             context: context,
             antialias: true, 
             alpha: true 
         });
+
+        console.log('context: ', context);
+
+        if ( renderer.extensions.get( 'ANGLE_instanced_arrays' ) === null ) {
+			console.error('instancing not supported!');
+        }else{
+            console.log('instancing IS supported!');
+        }
+        
+        this.renderer = renderer;
     }
     createBall({
         pos=new THREE.Vector3(0,0,0),
@@ -353,6 +373,8 @@ class PathAnimation{
     }
     animate(){
         this.renderer.render( this.scene, this.camera );
+
+        this.stats.update();
 
         // for(let l of this.lines){
         //     this.scene.remove(l);

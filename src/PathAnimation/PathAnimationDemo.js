@@ -3,13 +3,20 @@ import PathAnimation from './PathAnimation';
 import './PathAnimationDemo.scss';
 
 function PathAnimationDemo({}){
-    const canvas = useRef();
+    const canvas  = useRef();
+    const mainRef = useRef();
     const pathAnimation = useRef();
 
     useEffect(()=>{
-        pathAnimation.current = new PathAnimation({
+        let pa = new PathAnimation({
             canvas: canvas.current
         });
+
+        let stats = pa.stats;
+        mainRef.current.appendChild(stats.dom);
+
+        pathAnimation.current = pa;
+
 
         window.addEventListener('resize', onCanvasResized);
         return ()=>{
@@ -22,7 +29,8 @@ function PathAnimationDemo({}){
     }
 
     return (
-        <div className="MainPAD">
+        <div className="MainPAD"
+             ref={mainRef}>
             <canvas 
                 id="CanvasPAD"
                 ref={canvas}
