@@ -1,6 +1,10 @@
-import React from 'react';
-import WaitingBar from './WaitingBar/WaitingBar';
-import DiaSelector from './DiaSelector/DiaSelector';
+import React, { Component, useState, useEffect, useRef } from 'react';
+import { Switch, Route, withRouter } from "react-router-dom";
+import WaveWaitingBar from './WaveWaitingBar/WaveWaitingBar';
+import {FragmentAnmiator} from './FragmentImage';
+import {FragmentImagePreview, genFadingComponent} from './FragmentImagePreview';
+import CarouselPreview from './CarouselPreview';
+import PathAnimationDemo from './PathAnimation/PathAnimationDemo';
 import './App.css';
 
 window.mobilecheck = function() {
@@ -9,14 +13,23 @@ window.mobilecheck = function() {
   return check;
 };
 
-function App() {
-  return (
-    <div className="App">
-      <DiaSelector
-      	
-      />
-    </div>
-  );
+class App extends Component{
+	render(){
+    function genPath(i){
+      return process.env.PUBLIC_URL + '/pics/code/code' + i + '.jpg';
+    }
+    const imgPaths = [];
+    for(let i=0; i < 10; ++i){
+      imgPaths.push( genPath(i) );
+    }
+
+    console.log('imgPaths: ', imgPaths);
+		return (
+			<div className="App">
+        <PathAnimationDemo/>
+			</div>
+		);
+	}
 }
 
 export default App;

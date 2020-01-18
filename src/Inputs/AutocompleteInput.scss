@@ -1,0 +1,121 @@
+@import './InputVars';
+
+.MainINPT{
+    .InputDivINPT{
+        display: flex;
+        flex-direction: flow;
+        position: relative;
+        margin: 10px auto;
+        
+        .InputINPT{
+            width: 100%;
+            border: 1px solid $borderColor;
+            border-right: none;
+            padding: 0 5px;
+
+            &.MissingInput{
+                border: 1px solid $missingInputColor;
+                border-right: none;
+            }
+        }
+
+        .ArrowDownDivINPT{
+            width: 20px;
+            height: 80%;
+            border: 1px solid $borderColor;
+            border-left: none;
+            padding: 0 3px;
+
+            &.MissingInput{
+                border: 1px solid $missingInputColor;
+                border-left: none;
+            }
+
+            &.activated{
+                &:hover{
+                    background-color: #44444444;
+                    cursor: pointer;
+                }
+            }
+            &:not(.activated) .ArrowDownINPT{
+                opacity: 0.3;
+                cursor: inherit;
+            }
+            
+            .ArrowDownINPT{
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+    .MainHighlightedStringINPT{
+        .highlightedStrINPT{
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .NotHighlightedStrINPT{
+            font-weight: normal;
+            color: grey;
+        }
+    }
+}
+
+.MainFREEINPT{
+    display: grid;
+    justify-items: start;
+
+    $borderWidth: 2px;
+    $freeBorderColor: #ccc;
+    margin: 0 auto 50px auto;
+
+
+    .LabelFREEINPT{
+        color: $freeBorderColor;
+        padding-left: 5px;
+        font-size: 12px;
+    }
+    .BorderedInputDivFREEINPUT{
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        align-items: flex-end;
+
+        .InputFREEINPT{
+            border: none;
+            border-bottom: $borderWidth solid $borderColor;
+            width: 100%;
+            
+            margin-top: 0px;
+            padding: 5px;
+
+            font-weight: bold;
+
+            &.MissingInput{
+                border: none;
+                border-bottom: $borderWidth solid $missingInputColor;
+            }
+
+            &::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+                color: $freeBorderColor;
+                opacity: 1; /* Firefox */
+              }
+        }
+        .VertBorderFREEINPUT{
+            width:  $borderWidth;
+            height: 10px;
+            background-color: $borderColor;
+
+            &.MissingInput{
+                background-color: $missingInputColor;
+            }
+        }
+    }
+
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}

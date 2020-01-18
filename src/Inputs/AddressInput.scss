@@ -1,0 +1,90 @@
+@import './InputVars';
+
+.MainINPT{
+    .InputDivINPT{
+        display: flex;
+        flex-direction: flow;
+        position: relative;
+        margin: 10px auto;
+        
+        .InputINPT{
+            width: 100%;
+            border: 1px solid $borderColor;
+            border-right: none;
+            padding: 0 5px;
+
+            &.MissingInput{
+                border: 1px solid $missingInputColor;
+                border-right: none;
+            }
+        }
+
+        .ArrowDownDivINPT{
+            width: 20px;
+            height: 80%;
+            border: 1px solid $borderColor;
+            border-left: none;
+            padding: 0 3px;
+
+            &.MissingInput{
+                border: 1px solid $missingInputColor;
+                border-left: none;
+            }
+
+            &.activated{
+                &:hover{
+                    background-color: #44444444;
+                    cursor: pointer;
+                }
+            }
+            &:not(.activated) .ArrowDownINPT{
+                opacity: 0.3;
+                cursor: inherit;
+            }
+            
+            .ArrowDownINPT{
+                width: 20px;
+                height: 20px;
+            }
+        }
+    }
+    .MainHighlightedStringINPT{
+        .highlightedStrINPT{
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+        .NotHighlightedStrINPT{
+            font-weight: normal;
+            color: grey;
+        }
+    }
+}
+
+.MainADRSINPT{
+    display: grid;
+    justify-items: start;
+    align-items: center;
+    width: 100%;
+    margin: 5px 5px;
+
+
+    .LabelADRSINPT{
+        color: grey;
+        font-size: 0.8em;
+    }
+    .ValueADRSINPT{
+        font-weight: bold;
+        padding-top: 2px;
+    }
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+input[type="text"]:disabled {
+background: transparent;
+}

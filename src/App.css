@@ -1,5 +1,27 @@
+@import url('https://fonts.googleapis.com/css?family=Ubuntu&display=swap');
+
 .App {
   text-align: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: black;
+}
+
+#CanvasWWBDiv{
+  width: 800px;
+  height: 800px;
+  margin: auto;
+}
+
+:root {
+  --Nili-color: #ff00ff;
+  --Nili-color-dark: #aa00aa;
+  --Nili-color-light: #ffaaff;
+  --Nili-color-border: #ff88ff33;
+  --Nili-color-tableHighlight: #ff00ff22;
+  --Nili-color-blockBorder: #ff00ff88;
+
+  --Min-Width: 550px;
 }
 
 .App-logo {
@@ -30,4 +52,38 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+
+.FagmentImageTester{
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  margin: auto;
+}
+.FakeImageFI{
+  display: none;
+}
+.MainFI{
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+.CanvasFI{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+}
+
+.FragmentImageIndicator{
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 0%;
+  height: 3px;
+  background-color: #006644;
+  z-index: 999;
 }

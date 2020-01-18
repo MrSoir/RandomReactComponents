@@ -1,0 +1,35 @@
+
+.CDS{
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  /* background-color: black; */
+}
+
+.ImgCDS{
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 50%;
+  background-color: lime;
+  transform: translate(-50%, -50%);
+  opacity: 1;
+  /* box-sizing: border-box; */
+
+}
+.selectableCDS{
+  cursor: pointer;
+  opacity: 0.9;
+}
+.selectableCDS:hover{
+  opacity: 1;
+}
+#Img0CDS{
+  background-color: lime;
+}
+#Img1CDS{
+  background-color: blue;
+}
+#Img2CDS{
+  background-color: orange;
+}

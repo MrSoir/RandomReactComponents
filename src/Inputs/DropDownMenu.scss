@@ -1,0 +1,38 @@
+@import './InputVars';
+
+
+.DropDownDivINPT{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: calc(100% - 2px);
+    border: 1px solid $borderColor;
+    background-color: $dropDownMenuBackgroundColor;
+
+    display: grid;
+    justify-items: stretch;
+    height: 0;
+    overflow: hidden;
+
+    &.displayed{
+        height: auto;
+        opacity: 1;
+    }
+    &.hidden{
+        height: 0;
+        opacity: 0;;
+    }
+
+    .DropDownEelementINPT{
+        // border: 1px solid #66666644;
+        display: grid;
+        justify-items: left;
+        padding: 2px 5px;
+
+        cursor: pointer;
+
+        &:hover{
+            background-color: lightgray;
+        }
+    }
+}

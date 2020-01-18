@@ -1,0 +1,151 @@
+
+.ReactShowCase{
+	position: relative;
+	display: block;
+	
+	width: calc(100% - 50px);
+/*	min-width: 500px;*/
+	height: calc(100vh - 300px);
+	min-height: 400px;
+	
+	margin: auto;
+	margin-top: 0px;
+	margin-bottom: 40px;
+	
+	box-sizing: border-box;
+	border: 3px solid #aaa;
+}
+#DescriptionRSC{
+	margin-bottom: 30px;
+}
+#FullScreenRSC{
+	margin-bottom: 20px;
+}
+.FullScreenRSC{
+	position: absolute;
+	right: 0%;
+	line-height: 100%;
+	padding: 10px;
+	margin: 7px 10px;
+	font-size: 50px;
+	font-weight: bold;
+	color: orange;
+	z-index: 100;
+	cursor: pointer;
+	transition-duration: 0.5s;
+	background-color: #ffffff44;
+	border-radius: 10%;
+}
+.FullScreenRSC:hover{
+	transform: scale(1.2);
+}
+.DiaSelectorRSC{
+	position: absolute;
+	top: 0%;
+	left: 0%;
+	width: 100%;
+	height: 100%;
+	z-index: 0;
+}
+.CurtainButtonRSC{
+	height: 100%;
+	width: 100%;
+	margin: auto;
+	margin-top: 50vh;
+	transform: translateY(-100%);
+	font-size: 30px;
+}
+.HeadingRSC{
+	font-size: 40px;
+	font-weight: normal;
+	margin-top: 20px;
+}
+.DescriptionRSC{
+	font-size: 20px;
+	font-weight: normal;
+	text-align: justify;
+	width: 90%;
+	margin: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+}
+
+.SettingsDivRSC{
+	font-size: 20px;
+}
+.SliderContainerRSC{
+	font-weight: bold;
+	font-size: 40px;
+}
+/*.SliderDivRSC{
+	position: relative;
+	width: 90%;
+	max-width: 800px;
+	height: 30px;
+	margin: auto;
+	margin-bottom: 20px;
+	font-size: 25px;
+}*/
+
+.CheckBoxDivRSC{
+	display: flex;
+	font-size: 20px;
+	margin: auto;
+	width: 100%;
+	justify-content: center;
+	margin-bottom: 20px;
+}
+.CheckBoxLabelRSC{
+	font-size: 20px;
+	margin-right: 20px;
+}
+.CheckBoxRSC{
+	margin-top: 4px;
+}
+
+/*---------------------------*/
+
+#CodeDivRSC{
+	display: grid;
+	grid-template-rows: 50px 25px auto;
+	grid-template-areas: "heading" "codeFiles" "code";
+	
+	width: 95vh;
+	max-width: 1200px;
+	height: 60vh;
+	max-height: 800px;
+	margin: auto;
+	border: 1px solid black;
+}
+#CodeHeadingRSC{
+	font-weight: bold;
+	font-size: 20px;
+	margin: auto;
+	width: 100%;
+	height: 100%;
+	text-align: center;
+	color: black;
+}
+#CodeFilesRSC{
+	display: flex;
+	justify-content: center;
+	border: 1px solid black;
+}
+.CodeFileRSC{
+	margin: auto 5px;
+	background-color: lightgreen;
+	border: none;
+	border-radius: 2px;
+	font-weight: bold;
+	font-size: 15px;
+	
+	transition-duration: 0.4s;
+}
+.CodeFileRSC:hover{
+	background-color: var(--Nili-color-light);
+}
+#CodeRSC{
+	width: 100%;
+	height: 100%;
+	overflow: auto;
+}

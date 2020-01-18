@@ -30,7 +30,8 @@ class DiaSelector extends Component{
 		let previewBarShowBtnRef = this.previewBarShowBtnRef.current;
 		
 		if(showPreviewBar){
-			previewBarDSRef.style.width = '300px';
+			previewBarDSRef.style.width = '200px';
+			previewBarDSRef.style.minWidth = '200px';
 			previewBarShowBtnRef.style.opacity = '0';
 			setTimeout(()=>{
 				previewBarShowBtnRef.innerHTML = '⮜';
@@ -38,6 +39,7 @@ class DiaSelector extends Component{
 			}, 500);
 		}else{
 			previewBarDSRef.style.width = '0px';
+			previewBarDSRef.style.minWidth = '0px';
 			previewBarShowBtnRef.style.opacity = '0';
 			setTimeout(()=>{
 				previewBarShowBtnRef.innerHTML = '⮞';
@@ -48,12 +50,13 @@ class DiaSelector extends Component{
 		this.setState({showPreviewBar});
 	}
 	evalImagePaths(){
-		let imgBaseURI = process.env.PUBLIC_URL + '/pics/hippos/';
+/*		let imgBaseURI = process.env.PUBLIC_URL + '/pics/hippos/';
 		let imgPaths = []
 		for(let i=0; i < 6; ++i){
 			imgPaths.push( imgBaseURI + 'HippoPreview' + i + '.jpg' );
 		}
-		return imgPaths;
+		return imgPaths;*/
+		return this.props.previewImagePaths;
 	}
 	onPreviewClicked(id){
 		console.log('id: ', id);
@@ -61,9 +64,13 @@ class DiaSelector extends Component{
 		mainWindowRef.style.opacity = '0';
 		mainWindowRef.style.transform = 'scale(0)';
 		setTimeout(()=>{
-			this.setMainContent(id);
-			mainWindowRef.style.opacity = '1';
-			mainWindowRef.style.transform = 'scale(1)';
+			if(!!this.props.previewSelected){
+				this.props.previewSelected(id);
+			}
+			setTimeout(()=>{
+				mainWindowRef.style.opacity = '1';
+				mainWindowRef.style.transform = 'scale(1)';
+			}, 10);			
 		}, 500);
 	}
 	setMainContent(id){
@@ -78,7 +85,7 @@ class DiaSelector extends Component{
 					<div className="PreviewBarImgContainerDS">
 						<div className="PreviewBarImgFlexDS">
 							{this.state.imgPaths.map((imgPath,id)=>{
-								return <img className="PreviewImgDS"
+								return <img className={"PreviewImgDS" + ((id===this.props.selectedId) ? " chckd" : " unchckd")}
 												onClick={()=>{this.onPreviewClicked(id)}} 
 												src={imgPath} 
 												width={'80%'} 
@@ -90,15 +97,15 @@ class DiaSelector extends Component{
 				<div className="PreviewBarShowBtn">
 						<div className="PreviewBarShowBtnTxt"
 							  ref={this.previewBarShowBtnRef}
-							  onMouseOver={()=>{if(!window.mobilecheck()){this.onOverPreviewBarShowBtn();}}
-							  onClick    ={()=>{if( window.mobilecheck()){this.onOverPreviewBarShowBtn();}}>
+							  onMouseOver={()=>{if(!window.mobilecheck()){this.onOverPreviewBarShowBtn();}}}
+							  onClick    ={()=>{if( window.mobilecheck()){this.onOverPreviewBarShowBtn();}}}>
 							⮜
 						</div>
 				</div>
 				<div className="MainWindowContainerDS">
 					<div className="MainWindowDS"
 						  ref={this.mainWindowRef}>
-						  Preview # 0
+						{this.props.mainContent}
 					</div>
 				</div>
 			</div>

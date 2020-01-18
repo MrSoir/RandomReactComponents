@@ -7,13 +7,14 @@
 	align-items: center;
 }
 .PreviewBarDS{
-	width: 300px;
+	width: 250px;
+	min-width: 250px;
 	height: 100%;
 	background-color: #444444;
-	transition-duration: 1s;
+	transition-duration: 0.5s;
 }
 .PreviewBarImgContainerDS{
-	overflow-y: scroll;
+	overflow-y: auto;
 	height: 100%;
 }
 ::-webkit-scrollbar {
@@ -25,7 +26,7 @@
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #444444;
+  background: #555555;
 }
 
 /* Handle on hover */
@@ -44,10 +45,19 @@
 }
 .PreviewImgDS{
 	margin: 10px 0px 10px 0px;
-	cursor: pointer;
 	transition-duration: 0.5s;
+		border-radius: 5px;
 }
-.PreviewImgDS:hover{
+.PreviewImgDS.chckd{
+	transform: scale(1.1);
+	border: 5px solid lime;
+	box-sizing: border-box;
+	border-radius: 5px;
+}
+.PreviewImgDS.unchckd{
+	cursor: pointer;
+}
+.PreviewImgDS.unchckd:hover{
 	transform: scale(1.1);
 }
 .PreviewBarShowBtn{
@@ -74,9 +84,12 @@
 	height: 100%;
 }
 .MainWindowDS{
-	font-size: 60px;
-	font-weight: bold;
+	width: 100%;
+	height: 100%;
+	font-size: 40px;
+	font-weight: normal;
 	text-align: center;
-	color: orange;
+	color: #008800;
 	transition-duration: 0.5s;
+	overflow-y: auto;
 }
