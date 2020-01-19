@@ -17,15 +17,32 @@ function PathAnimationDemo({}){
 
         pathAnimation.current = pa;
 
-
         window.addEventListener('resize', onCanvasResized);
+        window.addEventListener('orientationchange', onCanvasResized);
+
         return ()=>{
             window.removeEventListener('resize', onCanvasResized);
+            window.removeEventListener('orientationchange', onCanvasResized);
         }
     }, []);
 
     function onCanvasResized(){
-        pathAnimation.current.resize();
+        let cnvs = canvas.current;
+        let main = mainRef.current;
+        const size = {
+            w: main.offsetWidth,
+            h: main.offsetHeight
+        };
+        let ratio = size.w / size.h;
+        if(ratio < 4/3){
+            size.h = size.w / (4/3);
+            cnvs.style.width  = `${size.w}px`;
+            cnvs.style.height = `${size.h}px`;
+        }else{
+            cnvs.style.width  = `100%`;
+            cnvs.style.height = `100%`;
+        }
+        pathAnimation.current.resize(size);
     }
 
     return (

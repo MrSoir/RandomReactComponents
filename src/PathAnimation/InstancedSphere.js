@@ -105,15 +105,27 @@ class InstancedSphere{
     createInstcMeshTest({
         path,
         startAtOrigin=true,
+        initOffset=1,
         cameraRotation,
         rotationVelocity=3,
         rotationOffset=1,
         rotEllipseOffs=1,
         secondsPerLoop=20,
         instanceCount=1000,
+        color=[1,0,0],
+        colRange=0.4,
+        hearts=true
     }){
         
+        var geometry;
+        if(hearts){
         var geometry = new THREE.InstancedBufferGeometry().copy(this.heartGeometry());
+        }else{
+            let bfGeom;
+            bfGeom = new THREE.CircleBufferGeometry( 0.1, 5 );
+            // bfGeom = new THREE.SphereBufferGeometry(0.1, 4, 4);
+            geometry = new THREE.InstancedBufferGeometry().copy( bfGeom );
+        }
         // var geometry = this.heartGeometry();)
 
         let curId = 0;
@@ -152,10 +164,10 @@ class InstancedSphere{
             // secondsPerRound.push( 100 );
             // secondsPerRound.push( rand(6, 12) );
 
-            let scndsPerRnd = rand(0.5, 1.2) *  10 * secondsPerLoop ;
+            let scndsPerRnd = rand(0.5, 1.0) *  10 * secondsPerLoop ;
             secondsPerRound.push( scndsPerRnd );
 
-            timeOffs.push( startAtOrigin ? 0 : rand(0, scndsPerRnd) );
+            timeOffs.push( startAtOrigin ? 0 : rand(0, scndsPerRnd) * initOffset );
 
             rotVel.push( rand(0.5, 1.0) * rotationVelocity );
 
@@ -170,9 +182,9 @@ class InstancedSphere{
             );
             randoms.push( rand(), rand(), rand() );
 
-            let r = rand(0.3, 1);
-            let g = 0;//rand(0.6, 1);
-            let b = 0;//rand(0.3, 1);
+            let r = rand(1-colRange, 1) * color[0];
+            let g = rand(1-colRange, 1) * color[1];
+            let b = rand(1-colRange, 1) * color[2];
             col.push( r,g,b )
         }
         console.log('rotEllipseFctr: ', rotEllipseFctr);

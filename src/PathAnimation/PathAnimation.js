@@ -96,7 +96,7 @@ class PathAnimation{
         // this.createRandomBals({n:100})
         // console.log('genRandomCatmullRom: ', this.genRandomCatmullRom());
 
-        // this.genRandomCatmullRomBalls();
+        // this.genHeart();
         this.genMrSoir();
 
         setTimeout(this.animate, 100);
@@ -446,7 +446,7 @@ class PathAnimation{
         var curve = new THREE.CatmullRomCurve3( pth, closed );
         return curve;
     }
-    genRandomCatmullRomBalls(){
+    genHeart(){
         const curve = this.genRandomCatmullRom(true);
         const points = curve.getSpacedPoints ( 500 );
         console.log('points: ', points);
@@ -463,16 +463,25 @@ class PathAnimation{
         const mesh = is.createInstcMeshTest({
             path: points,
             startAtOrigin: false,
-            cameraRotation: this.cameraRot
+            instanceCount: 5000,
+            // initOffset: 0.5,
+            cameraRotation: this.cameraRot,
+            secondsPerLoop: 10,
+            rotationVelocity: 4,
+            rotationOffset: 1,
+            rotEllipseOffs: 3,
+            colRange: 0.5,
+            hearts: true,
         });
         this.scene.add( mesh );
         this.is = is;
     }
     genMrSoir(){
-        let sclFctr = 8;
+        let mrSclFctr = 8;
+        let soirSclFctr = mrSclFctr * 1.2;
         let iDotSclFctr = 1.5;
-        const MRcr   = this.genCatmullRom( this.genMrPath(sclFctr), false );
-        const SOIRcr = this.genCatmullRom( this.genSoirPath(sclFctr), false );
+        const MRcr   = this.genCatmullRom( this.genMrPath(mrSclFctr), false );
+        const SOIRcr = this.genCatmullRom( this.genSoirPath(soirSclFctr), false );
         const IDOTcr = this.genCatmullRom( this.genIDotPath(iDotSclFctr), true);
         // const Scr = this.genCatmullRom( this.genSPath(sclFctr), false );
         // const Ocr = this.genCatmullRom( this.genOPath(sclFctr), true );
@@ -488,33 +497,74 @@ class PathAnimation{
         // curves.push(Icr);
         // curves.push(Rcr);
 
+        let scale = [
+            mrSclFctr,
+            soirSclFctr,
+            iDotSclFctr
+        ];
+
         let translate = [];
         translate.push( new THREE.Vector3(-10, -1, 0) ); // Mr
         translate.push( new THREE.Vector3( -2, -4, 0) ); // Soir
-        translate.push( new THREE.Vector3(  3, 0, 0) ); // i-dot
+        translate.push( new THREE.Vector3(  4.5, 1, 0) ); // i-dot
 
         let instanceCounts = [
-            2000, // Mr
-            2000, // Soir
-             200, // idot
+             2000, // Mr
+             5000, // Soir
+              200, // idot
         ];
-
+        let colors = [
+            [0,1,0],
+            [0,1,0],
+            [0,1,0],
+        ]
+        let hearts = [
+            false,
+            false,
+            false
+        ];
 
         this.instancedPaths = [];
         
         curves.map((curve, id)=>{
-            const points = curve.getSpacedPoints ( 500 );
             let trnsl = translate[id];
-    
-            const is = new InstancedSphere();
-            const mesh = is.createInstcMeshTest({
+            let col = colors[id];
+            
+            const points = curve.getSpacedPoints ( 500 );
+
+            let is, mesh;
+            is = new InstancedSphere();
+            mesh = is.createInstcMeshTest({
                 path: points,
-                instanceCount: instanceCounts[id],
+                instanceCount: instanceCounts[id] * 0.1,
                 startAtOrigin: false,
                 cameraRotation: this.cameraRot,
-                secondsPerLoop: 5,
+                secondsPerLoop: 30,
+                rotationVelocity: 2,
+                rotationOffset: 1,
+                rotEllipseOffs: 2,
+                color: [col[0]*0.2, col[1]*0.2, col[2]*0.1],
+                colRange: 0.5,
+                hearts: hearts[id],
+            });
+            mesh.geometry.translate(trnsl.x, trnsl.y, trnsl.z);
+            this.scene.add( mesh );
+            this.instancedPaths.push( is );
+    
+            is = new InstancedSphere();
+            mesh = is.createInstcMeshTest({
+                path: points,
+                instanceCount: instanceCounts[id] * 0.3,
+                startAtOrigin: true,
+                initOffset: 0.5,
+                cameraRotation: this.cameraRot,
+                secondsPerLoop: 4,
+                rotationVelocity: 4,
                 rotationOffset: 1,
                 rotEllipseOffs: 3,
+                color: col,
+                colRange: 0.5,
+                hearts: hearts[id],
             });
             mesh.geometry.translate(trnsl.x, trnsl.y, trnsl.z);
             this.scene.add( mesh );
@@ -531,11 +581,15 @@ class PathAnimation{
         let r = Math.floor(rand(minr, maxr)) << 16;
         return r + g + b;
     }
-    resize(){
-        const [w,h] = this.canvasSize();
-        this.camera.aspect = w/h;
+    resize(newSize){
+        let [w,h] = this.canvasSize();
+        if(newSize){
+            w = newSize.w;
+            h = newSize.h;
+        }
+        this.camera.aspect = w / h;
 		this.camera.updateProjectionMatrix();
-		this.renderer.setSize(w, h);
+        this.renderer.setSize(w, h);
     }
     canvasSize(){
         return [this.canvas.offsetWidth, this.canvas.offsetHeight];
