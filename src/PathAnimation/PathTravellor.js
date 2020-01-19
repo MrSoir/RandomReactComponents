@@ -40,6 +40,13 @@ class PathTravellor{
         let mat = Math3D.quaternionMatrix(dir, angle);
         let ortho = Math3D.arbitraryOrthogonal(dir);
         let rotUni = ortho.clone().applyMatrix4(mat);
+
+        let ortho4 = new THREE.Vector4(ortho.x, ortho.y, ortho.z, 1.0);
+        let rotUni1 = ortho4.applyMatrix4(mat);
+
+        // console.log('rotUni0: ', rotUni);
+        // console.log('rotUni1: ', rotUni1);
+
         let rot = rotUni.multiplyScalar( this.rotOffs );
 
         let posRot = posOnPath.clone().add(rot);

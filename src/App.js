@@ -5,6 +5,7 @@ import {FragmentAnmiator} from './FragmentImage';
 import {FragmentImagePreview, genFadingComponent} from './FragmentImagePreview';
 import CarouselPreview from './CarouselPreview';
 import PathAnimationDemo from './PathAnimation/PathAnimationDemo';
+import PathTracker from './PathTracker/PathTracker';
 import './App.css';
 
 window.mobilecheck = function() {

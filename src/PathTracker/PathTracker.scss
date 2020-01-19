@@ -1,0 +1,51 @@
+
+.MainTRCKR{
+    .TrackerTRCKR{
+        width: 500px;
+        height: 500px;
+        display: grid;
+        justify-items: center;
+        align-items: center;
+        margin: auto;
+
+        background-color: grey;
+
+        .ImgTRCKR{
+            grid-column: 1/3;
+            grid-row: 1/3;
+            width: 100%;
+            height: 100%;
+            background-color: blue;
+        }
+        .PointsTRCKR{
+            grid-column: 1/3;
+            grid-row: 1/3;
+            width: 100%;
+            height: 100%;
+            position: relative;
+
+            .PointTRCKR{
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 6px;
+                height: 6px;
+                background-color: red;
+                box-sizing: border-box;
+                border-radius: 50%;
+            }
+        }
+        // .CanvasTRCKR{
+        //     grid-column: 1/3;
+        //     grid-row: 1/3;
+        //     width: 100%;
+        //     height: 100%;
+        //     background-color: transparent;
+        // }
+    }
+
+    .ArraysTRCKR{
+        color: white;
+        font-weight: bold;
+    }
+}
