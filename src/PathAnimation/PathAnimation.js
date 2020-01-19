@@ -155,17 +155,17 @@ class PathAnimation{
     }
     genRandomCatmullRomBalls(){
         const curve = this.genRandomCatmullRom();
-        const points = curve.getPoints( 50 );
-        // let lp;
-        // points.forEach(pos=>{
+        const points = curve.getSpacedPoints ( 50 );
+        let lp;
+        points.forEach(pos=>{
             // this.createBall({pos, size: 0.03});
-            // if(lp){
-            //     this.drawLine(lp, pos, {color: 0xff00ff});
-            // }
-            // lp = pos;
-        // });
+            if(lp){
+                this.drawLine(lp, pos, {color: 0xff00ff});
+            }
+            lp = pos;
+        });
 
-        for(let i=0; i < 500; ++i){
+        for(let i=0; i < 50; ++i){
             const pt = new PathTravellor({
                 path: points,
                 moveVel: rand(0.1, 0.3), 
@@ -187,14 +187,9 @@ class PathAnimation{
         }
 
         const is = new InstancedSphere();
-        const mesh = is.createInstcMeshTest();
-        // const mesh = is.genCustomShapeMesh();
-        // const mesh = is.genInstancedMesh();
+        const mesh = is.createInstcMeshTest(points);
         this.scene.add( mesh );
-
-        // const it = new InstanceTest();
-        // const mesh = it.genMesh();
-        // this.scene.add( mesh );
+        this.is = is;
     }
     genRandomColor({
         minb=80, maxb=255,
@@ -371,28 +366,23 @@ class PathAnimation{
 
         return line;
     }
+    moveInstancedSphere(time){
+        if(this.is){
+            this.is.move(time);
+        }
+    }
     animate(){
         this.renderer.render( this.scene, this.camera );
-
         this.stats.update();
 
-        // for(let l of this.lines){
-        //     this.scene.remove(l);
-        // }            console.log(v1);
+        var time = performance.now() * 0.001;
 
+        // this.updateLight(time);
 
-        if(!this.animcntr){
-            this.animcntr = 0;
-        }
-        this.animcntr++;
+        this.rotateCamera(time);
 
-        // this.updateLight();
-
-        this.rotateCamera();
-
-        this.movePt();
-
-        // if(this.animcntr > 100)return;
+        this.movePt(time);
+        this.moveInstancedSphere(time);
 
         requestAnimationFrame( this.animate );
     }

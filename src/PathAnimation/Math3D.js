@@ -48,6 +48,9 @@ const Math3D = {
         return cross;
     },
     //-------------------------------------------
+    rand: (min=-1.0, max=1.0)=>{
+        return min + Math.random() * (max - min);
+    },
 }
 
 export default Math3D;
