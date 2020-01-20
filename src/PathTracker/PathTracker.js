@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import './PathTracker.scss';
-import img from './MrSoir.png';
+import img from './Welcome.png';
 
 function Point({p, pointClicked}){
 

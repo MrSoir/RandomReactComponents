@@ -2,8 +2,10 @@ import React, { Component, useState, useEffect, useRef } from 'react';
 import {Switch, Route, withRouter} from "react-router-dom";
 // import PathAnimation from './PathAnimation';
 // import MrSoirAnimation from './MrSoirAnimation';
-import HeartAnimation from './HeartAnimation';
+// import HeartAnimation from './HeartAnimation';
 import MrSoirHeartAnimation from './MrSoirHeartAnimation';
+// import WelcomeMrSoirAnimation from './WelcomeMrSoirAnimation';
+
 import './PathAnimationDemo.scss';
 
 function PathAnimationDemo({}){
