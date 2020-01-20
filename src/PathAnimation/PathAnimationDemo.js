@@ -1,5 +1,9 @@
 import React, { Component, useState, useEffect, useRef } from 'react';
-import PathAnimation from './PathAnimation';
+import {Switch, Route, withRouter} from "react-router-dom";
+// import PathAnimation from './PathAnimation';
+// import MrSoirAnimation from './MrSoirAnimation';
+import HeartAnimation from './HeartAnimation';
+import MrSoirHeartAnimation from './MrSoirHeartAnimation';
 import './PathAnimationDemo.scss';
 
 function PathAnimationDemo({}){
@@ -8,7 +12,7 @@ function PathAnimationDemo({}){
     const pathAnimation = useRef();
 
     useEffect(()=>{
-        let pa = new PathAnimation({
+        let pa = new MrSoirHeartAnimation({
             canvas: canvas.current
         });
 
@@ -56,4 +60,5 @@ function PathAnimationDemo({}){
     )
 }
 
-export default PathAnimationDemo;
+// export default PathAnimationDemo;
+export default withRouter(PathAnimationDemo);

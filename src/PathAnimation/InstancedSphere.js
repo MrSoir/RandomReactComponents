@@ -15,53 +15,6 @@ class InstancedSphere{
         
         // let curPrgrsInBetween = this.evalCurPrgrsInBetween(time);
     }
-    // progress(time){
-    //     return (time % this.secondsPerRound) / this.secondsPerRound;
-    // }
-    // curPathId(prgrs){
-    //     let pathCountF = this.pathCount;
-    //     let curIdF = pathCountF * prgrs;
-    //     let curId = Math.floor(curIdF);
-    //     return curId;
-    // }
-    // nextPathId(curId){
-    //     let nxtId = curId + 1;
-    //     if(nxtId >= this.pathCount){
-    //         nxtId = 0;
-    //     }
-    //     return nxtId;
-    // }
-    // evalCurPrgrsInBetween(time){
-    //     let prgrs = this.progress(time);
-
-    //     let curId = this.curPathId(prgrs);
-    //     let nxtId = this.nextPathId(curId);
-
-    //     let v0 = this.path[curId];
-    //     let v1 = this.path[nxtId];
-        
-    //     let curIdF  = curId;
-    //     let nxtIdF  = nxtId;
-    //     let pthCntF = this.pathCount;
-
-    //     let curIdPrgrs = curIdF / pthCntF;
-    //     let nxtIdPrgrs = nxtIdF / pthCntF;
-    //     let prgrInBetween = (prgrs - curIdPrgrs) / (nxtIdPrgrs - curIdPrgrs);  
-
-    //     console.log({
-    //         time,
-    //         prgrs,
-    //         curId,
-    //         nxtId,
-    //         curIdPrgrs,
-    //         prgrInBetween
-    //     });
-    //     return prgrInBetween;              
-    //     // return v0;
-    //     // return v1;
-
-    //     // return v0.clone().add( v1.clone().sub(v0.clone()).multiplyScalar(prgrInBetween) );
-    // }
     heartGeometry(){
         // var x = 0, y = 0;
 
@@ -104,6 +57,7 @@ class InstancedSphere{
     }
     createInstcMeshTest({
         path,
+        path2,
         startAtOrigin=true,
         initOffset=1,
         cameraRotation,
@@ -136,7 +90,8 @@ class InstancedSphere{
 
 
         const rand = Math3D.rand;
-        let pathArr = [];
+        let pathArr  = this.genPathArr(path);
+        let pathArr2 = this.genPathArr(!!path2 ? path2 : path);
         let secondsPerRound = [];
 
         let rotVel = [];
@@ -157,9 +112,6 @@ class InstancedSphere{
         }
 
         let col = [];
-        path.forEach(p=>{
-            pathArr = pathArr.concat( [p.x, p.y, p.z] );
-        });
         for(let i=0; i < instanceCount; ++i){
             // secondsPerRound.push( 100 );
             // secondsPerRound.push( rand(6, 12) );
@@ -201,8 +153,12 @@ class InstancedSphere{
 
         let material = new THREE.RawShaderMaterial({
             uniforms: {
-                "time":      { value: 0.0 },
-                "path":      { type: "fv",  value: pathArr },
+                "time":                    { value: 0.0 },
+                "path":                    { type: "fv",  value: pathArr },
+                "path2":                   { type: "fv",  value: pathArr2 },
+                "pathTransitionProgress":  { value: 0.0 },
+                "doTransition":            { value: 1.0 }, // 0 == false | 1 == true
+
                 "pathCount": { value: path.length },
                 "cameraRotation": {value: cameraRotation}
                 
@@ -215,6 +171,7 @@ class InstancedSphere{
             side: THREE.DoubleSide,
             transparent: false
         });
+        console.log('uniforms: ', material.uniforms);
 
         let mesh = new THREE.Mesh(geometry, material);
 
@@ -222,8 +179,33 @@ class InstancedSphere{
         this.gemoetry = geometry;
         this.mesh     = mesh;
 
-
         return mesh;
+    }
+    genPathArr(path){
+        let pathArr = [];
+        path.forEach(p=>{
+            pathArr = pathArr.concat( [p.x, p.y, p.z] );
+        });
+        return pathArr;
+    }
+    updatePath(path){
+        this.material.uniforms["path"] = {
+            type: "fv",  
+            value: this.genPathArr(path)
+        };
+        this.material.uniforms["pathCount"] = {
+            value: path.length
+        };
+    }
+    updatePath2(path){
+        this.material.uniforms["path"].value      = path;
+        this.material.uniforms["pathCount"].value = path.length;
+    }
+    updateUniforms(uniforms){
+        for(let attr in uniforms){
+            this.material.uniforms[attr].value = uniforms[attr];
+        }
+        console.log('uniforms.pathTransitionProgress: ', this.material.uniforms.pathTransitionProgress);
     }
     vertexShader(pathCount){
         if(!pathCount){
@@ -236,30 +218,39 @@ class InstancedSphere{
         #define PI  3.1415926535897932384626433832795
         #define TAU 6.2831853071795864769252867665590
 
-        uniform mat4 modelViewMatrix;
-        uniform mat4 projectionMatrix;
+        uniform mat4  modelViewMatrix;
+        uniform mat4  projectionMatrix;
         uniform float time;
-        uniform vec3 path[ ${pathCount + 1} ];
-        uniform int pathCount;
-        uniform vec3 uVec3;
-        uniform int curId;
+
+        uniform vec3  path[  ${pathCount + 1} ];
+        uniform vec3  path2[ ${pathCount + 1} ];
+        uniform float pathTransitionProgress;
+        uniform float doTransition;
+        uniform int   pathCount;
+
+        uniform vec3  uVec3;
+        uniform int   curId;
         uniform float cameraRotation;
 
-        // uniform vec3 path;
-        // uniform vec3 uFloatArray3[ 2 ];
-
-        in vec3 position;
-        in vec3 col;
-        in vec3 randoms;
+        in vec3  position;
+        in vec3  col;
+        in vec3  randoms;
         in float secondsPerRound;
         in float rotVel;
         in float rotOffs;
         in float rotAngleOffs;
-        in vec2 rotEllipseFctr;
+        in vec2  rotEllipseFctr;
         in float timeOffs;
 
         out vec3 fcol;
 
+        vec3 getPathId(int id){
+            if(doTransition > 0.5){
+                return path[id] + (path2[id] - path[id]) * pathTransitionProgress;
+            }else{
+                return path[id];
+            }
+        }
         float getTime(){
             return time + timeOffs;
         }
@@ -285,8 +276,8 @@ class InstancedSphere{
             int curId = curPathId(prgrs);
             int nxtId = nextPathId(curId);
 
-            vec3 v0 = path[curId];
-            vec3 v1 = path[nxtId];
+            vec3 v0 = getPathId(curId);//path[curId];
+            vec3 v1 = getPathId(nxtId);//path[nxtId];
             
             float curIdF  = float(curId);
             float nxtIdF  = float(nxtId);
@@ -361,8 +352,8 @@ class InstancedSphere{
             int curId = curPathId(prgrs);
             int nxtId = nextPathId(curId);
 
-            vec3 v0 = path[curId];
-            vec3 v1 = path[nxtId];
+            vec3 v0 = getPathId(curId);//path[curId];
+            vec3 v1 = getPathId(nxtId);//path[nxtId];
             vec3 dir = v1 - v0;
 
             mat4 m = quaternionMatrix(dir, rotAngle);
@@ -419,7 +410,8 @@ class InstancedSphere{
             gl_Position = projectionMatrix * modelViewMatrix * vec4(tarPos, 1.0);
 
             float prgrs = progress();
-            fcol = col;//vec3(prgrs, 0.0, 0.0);
+            float colorPulsation = pathTransitionProgress*0.2;
+            fcol = vec3(col.r - colorPulsation, col.g - colorPulsation, col.b - colorPulsation);
         }
     `;
     }
